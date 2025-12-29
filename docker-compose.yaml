@@ -14,13 +14,20 @@ services:
 
   backend:
     container_name: appoinment-system-api
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=development
       - PORT=4000
-      - DATABASE_URL=postgresql://postgres:password@db:5432/appointment_system
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/appointment_system
 
 volumes:
   postgres-data:
