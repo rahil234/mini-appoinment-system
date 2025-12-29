@@ -1,0 +1,43 @@
+{
+  "name": "mini-appoinment-system",
+  "version": "0.0.0",
+  "private": true,
+  "description": "This is an api server of an mini-appoinment system.",
+  "keywords": [
+    "SAAS",
+    "express",
+    "react",
+    "docker"
+  ],
+  "homepage": "https://github.com/rahil234/mini-appoinment-system#readme",
+  "bugs": {
+    "url": "https://github.com/rahil234/mini-appoinment-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahil234/mini-appoinment-system.git"
+  },
+  "license": "ISC",
+  "author": "rahil234",
+  "main": "dist/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/server.js",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "inversify": "^7.10.8",
+    "jsonwebtoken": "^9.0.3",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0"
+  }
+}
