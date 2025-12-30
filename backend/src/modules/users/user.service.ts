@@ -1,9 +1,15 @@
 import { injectable } from 'inversify';
 
-import { prisma } from '@/config/prisma';
+import { prisma } from '@/config/prisma.config';
 
 @injectable()
 export class UserService {
+  async findById(id: string) {
+    return prisma.user.findFirst({
+      where: { id, isDeleted: false },
+    });
+  }
+
   async findByEmail(email: string) {
     return prisma.user.findFirst({
       where: { email, isDeleted: false },

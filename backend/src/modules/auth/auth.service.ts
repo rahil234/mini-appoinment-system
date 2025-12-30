@@ -10,7 +10,8 @@ export class AuthService {
   constructor(
     @inject(TYPES.UserService)
     private readonly userService: UserService,
-  ) {}
+  ) {
+  }
 
   async register(data: { name: string; email: string; password: string }) {
     const existing = await this.userService.findByEmail(data.email);
@@ -36,6 +37,7 @@ export class AuthService {
     }
 
     const isValid = await bcrypt.compare(password, user.password);
+
     if (!isValid) {
       throw new Error('Invalid credentials');
     }

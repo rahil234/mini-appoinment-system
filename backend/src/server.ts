@@ -1,5 +1,5 @@
 import { createApp } from '@/app';
-import { connectDatabase } from '@/config/prisma';
+import { connectDatabase } from '@/config/prisma.config';
 
 const bootstrap = async () => {
   const app = await createApp();
