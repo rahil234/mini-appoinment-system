@@ -8,7 +8,7 @@ import { HttpError } from '@/utils/http-error';
 @injectable()
 export class UserController {
   constructor(
-    @inject(TYPES.AuthService)
+    @inject(TYPES.UserService)
     private readonly _userService: UserService,
   ) {
   }
@@ -16,12 +16,14 @@ export class UserController {
   me = async (req: Request, res: Response) => {
     const userId = req.user.id;
 
-    const user = this._userService.findById(userId);
+    const user = await this._userService.findById(userId);
 
     if (!user) {
       throw new HttpError('User not found', 404);
     }
 
-    res.status(201).json(user);
+    const { password, isDeleted, updatedAt, ...result } = user;
+
+    res.status(201).json(result);
   };
 }

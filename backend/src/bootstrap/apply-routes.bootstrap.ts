@@ -6,8 +6,8 @@ import caseRoutes from '@/modules/cases/case.routes';
 import appointmentRoutes from '@/modules/appointments/appointment.routes';
 
 export const applyRoutes = (app: Express) => {
-  app.use('/auth', authRoute);
-  app.use('/users', userRoutes);
-  app.use('/appointments', appointmentRoutes);
-  app.use('/cases', caseRoutes);
+  app.use('/api/auth', authRoute);
+  app.use('/api/users', userRoutes);
+  app.use('/api/appointments', appointmentRoutes);
+  app.use('/api/cases', caseRoutes);
 };

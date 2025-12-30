@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { injectable, inject } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
 import { UserService } from '@/modules/users/user.service';
+import { signAccessToken, signRefreshToken } from '@/utils/jwt.util';
 
 @injectable()
 export class AuthService {
@@ -27,7 +27,13 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return this.generateToken(user.id, user.role);
+    const accessToken = signAccessToken({ sub: user.id, role: user.role });
+    const refreshToken = signRefreshToken({ sub: user.id });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   async login(email: string, password: string) {
@@ -42,12 +48,12 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    return this.generateToken(user.id, user.role);
-  }
+    const accessToken = signAccessToken({ sub: user.id, role: user.role });
+    const refreshToken = signRefreshToken({ sub: user.id });
 
-  private generateToken(userId: string, role: string) {
-    return jwt.sign({ sub: userId, role }, process.env.JWT_SECRET!, {
-      expiresIn: '1d',
-    });
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }

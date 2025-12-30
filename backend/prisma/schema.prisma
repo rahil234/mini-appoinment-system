@@ -38,7 +38,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([email])
+  @@index([email, isDeleted])
 }
 
 model Appointment {
@@ -54,9 +54,9 @@ model Appointment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
-  @@index([date])
-  @@index([status])
+  @@index([userId, isDeleted])
+  @@index([userId, status, isDeleted])
+  @@index([date, isDeleted])
 }
 
 model Case {
@@ -72,5 +72,6 @@ model Case {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([assignedUserId])
+  @@index([assignedUserId, isDeleted])
+  @@index([assignedUserId, status, isDeleted])
 }

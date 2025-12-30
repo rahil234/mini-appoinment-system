@@ -4,6 +4,17 @@ import { prisma } from '@/config/prisma.config';
 
 @injectable()
 export class UserService {
+  async createUser(data: {
+    name: string;
+    email: string;
+    password: string;
+    role?: 'ADMIN' | 'USER';
+  }) {
+    return prisma.user.create({
+      data,
+    });
+  }
+
   async findById(id: string) {
     return prisma.user.findFirst({
       where: { id, isDeleted: false },
@@ -13,17 +24,6 @@ export class UserService {
   async findByEmail(email: string) {
     return prisma.user.findFirst({
       where: { email, isDeleted: false },
-    });
-  }
-
-  async createUser(data: {
-    name: string;
-    email: string;
-    password: string;
-    role?: 'ADMIN' | 'USER';
-  }) {
-    return prisma.user.create({
-      data,
     });
   }
 }

@@ -1,4 +1,5 @@
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import express, { Express } from 'express';
 
 import { loggerMiddleware } from '@/middlewares/logger.middleware';
@@ -10,8 +11,11 @@ export const applyMiddlewares = async (app: Express) => {
   app.use(
     cors({
       origin: corsOrigins,
+      credentials: true,
     }),
   );
+
+  app.use(cookieParser());
 
   app.use(express.json());
 

@@ -1,33 +1,21 @@
-import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 import { HttpError } from '@/utils/http-error';
-
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
+import { verifyAccessToken } from '@/utils/jwt.util';
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   _res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
+  const accessToken = req.cookies['access_token'] as string;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!accessToken) {
     return next(new HttpError('Unauthorized', 401));
   }
 
-  const token = authHeader.split(' ')[1];
-
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as {
-      sub: string;
-      role: string;
-    };
+    const payload = verifyAccessToken(accessToken);
 
     req.user = {
       id: payload.sub,
