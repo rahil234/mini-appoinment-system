@@ -4,8 +4,8 @@ declare namespace NodeJS {
 
       CORS_ORIGINS?: string;
 
-      JWT_SECRET?: string;
-      JWT_EXPIRES_IN?: string;
+      JWT_SECRET: string;
+      JWT_EXPIRES_IN: string;
 
       ADMIN_EMAIL?: string;
       ADMIN_PASSWORD?: string;

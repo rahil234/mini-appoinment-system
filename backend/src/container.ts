@@ -11,6 +11,8 @@ import { AuthController } from '@/modules/auth/auth.controller';
 import { AppointmentController } from '@/modules/appointments/appointment.controller';
 import { CaseController } from '@/modules/cases/case.controller';
 import { UserController } from '@/modules/users/user.controller';
+import { AnalyticsController } from '@/modules/analytics/analytics.controller';
+import { AnalyticsService } from '@/modules/analytics/analytics.service';
 
 export const container = new Container();
 
@@ -25,6 +27,7 @@ container
   .bind<AppointmentService>(TYPES.AppointmentService)
   .to(AppointmentService);
 container.bind<CaseService>(TYPES.CaseService).to(CaseService);
+container.bind<AnalyticsService>(TYPES.AnalyticsService).to(AnalyticsService);
 
 /**
  * ======================
@@ -35,3 +38,4 @@ container.bind<AuthController>(AuthController).toSelf();
 container.bind<UserController>(UserController).toSelf();
 container.bind<AppointmentController>(AppointmentController).toSelf();
 container.bind<CaseController>(CaseController).toSelf();
+container.bind<AnalyticsController>(AnalyticsController).toSelf();

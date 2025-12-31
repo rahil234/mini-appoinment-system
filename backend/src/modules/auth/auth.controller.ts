@@ -3,18 +3,18 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
 import { AuthService } from '@/modules/auth/auth.service';
-import { setAccessToken, setRefreshToken } from '@/modules/auth/utils/cookie.utils';
+import { clearCookies, setAccessToken, setRefreshToken } from '@/modules/auth/utils/cookie.utils';
 
 @injectable()
 export class AuthController {
   constructor(
     @inject(TYPES.AuthService)
-    private readonly authService: AuthService,
+    private readonly _authService: AuthService,
   ) {
   }
 
   register = async (req: Request, res: Response) => {
-    const { accessToken, refreshToken } = await this.authService.register(req.body);
+    const { accessToken, refreshToken } = await this._authService.register(req.body);
 
     setAccessToken(res, accessToken);
     setRefreshToken(res, refreshToken);
@@ -30,7 +30,7 @@ export class AuthController {
     const {
       accessToken,
       refreshToken,
-    } = await this.authService.login(email, password);
+    } = await this._authService.login(email, password);
 
     setAccessToken(res, accessToken);
     setRefreshToken(res, refreshToken);
@@ -38,5 +38,23 @@ export class AuthController {
     res.json({
       message: 'Logged in successfully',
     });
+  };
+
+  logout = (_req: Request, res: Response) => {
+    clearCookies(res);
+    res.json({
+      message: 'Logged out successfully',
+    });
+  };
+
+  refreshToken = async (_req: Request, res: Response) => {
+    const token = _req.cookies['refresh_token'];
+
+    const { accessToken, refreshToken } = await this._authService.refreshTokens(token);
+
+    setAccessToken(res, accessToken);
+    setRefreshToken(res, refreshToken);
+
+    res.json({ message: 'Refreshed successfully' });
   };
 }

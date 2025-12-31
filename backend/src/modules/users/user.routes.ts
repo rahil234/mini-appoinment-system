@@ -10,4 +10,6 @@ const controller = container.get(UserController);
 
 router.get('/me', authMiddleware, controller.me);
 
+router.get('/', authMiddleware, controller.users);
+
 export default router;

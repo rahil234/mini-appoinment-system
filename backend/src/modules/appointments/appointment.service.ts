@@ -32,6 +32,7 @@ export class AppointmentService {
   async list(filters: {
     page: number;
     limit: number;
+    search?: string;
     status?: string;
     userId?: string;
     date?: string;
@@ -42,6 +43,7 @@ export class AppointmentService {
 
     if (status) where.status = status;
     if (userId) where.userId = userId;
+    if (filters.search) where.title = { contains: filters.search };
     if (date)
       where.date = {
         gte: new Date(date),

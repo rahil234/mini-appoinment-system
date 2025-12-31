@@ -19,5 +19,6 @@ export function setRefreshToken(res: Response, token: string) {
 }
 
 export function clearCookies(res: Response) {
-  res.clearCookie('token');
+  res.clearCookie('access_token');
+  res.clearCookie('refresh_token');
 }

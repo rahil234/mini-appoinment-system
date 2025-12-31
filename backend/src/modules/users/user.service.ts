@@ -26,4 +26,8 @@ export class UserService {
       where: { email, isDeleted: false },
     });
   }
+
+  async findAll() {
+    return prisma.user.findMany();
+  }
 }
