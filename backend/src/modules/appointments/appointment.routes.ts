@@ -5,6 +5,7 @@ import { authMiddleware } from '@/middlewares/auth.middleware';
 import { AppointmentController } from '@/modules/appointments/appointment.controller';
 
 const router = Router();
+
 const controller = container.get(AppointmentController);
 
 router.post('/', authMiddleware, controller.createAppointment);

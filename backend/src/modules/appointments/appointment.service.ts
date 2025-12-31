@@ -8,7 +8,8 @@ export class AppointmentService {
   async create(data: {
     title: string;
     date: Date;
-    status?: any;
+    description?: string;
+    status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
     userId: string;
   }) {
     return prisma.appointment.create({ data });
