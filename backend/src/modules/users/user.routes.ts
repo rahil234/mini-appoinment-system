@@ -7,6 +7,7 @@ import { validate } from '@/middlewares/validate';
 import {
   GetMeRequestSchema,
   GetUsersRequestSchema,
+  UpdateUserRequestSchema,
 } from '@/modules/users/schemas/user.request.schema';
 
 const router = Router();
@@ -20,6 +21,13 @@ router.get(
   authMiddleware,
   validate(GetUsersRequestSchema),
   controller.users,
+);
+
+router.put(
+  '/:id',
+  authMiddleware,
+  validate(UpdateUserRequestSchema),
+  controller.updateUser,
 );
 
 export default router;

@@ -39,3 +39,20 @@ export const GetUsersRequestSchema = z.object({
 });
 
 export type GetUsersQueryDto = z.infer<typeof GetUsersRequestSchema>['query'];
+
+export const UpdateUserRequestSchema = z.object({
+  body: z.object({
+    isDeleted: z.boolean('isDeleted must be a boolean'),
+  }),
+  params: z.object({
+    id: z.uuid('Invalid user id'),
+  }),
+});
+
+export type UpdateUserDto = z.infer<
+  typeof UpdateUserRequestSchema
+>['body'];
+
+export type UpdateUserParamsDto = z.infer<
+  typeof UpdateUserRequestSchema
+>['params'];

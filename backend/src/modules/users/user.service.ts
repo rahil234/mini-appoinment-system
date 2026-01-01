@@ -30,4 +30,11 @@ export class UserService {
   async findAll() {
     return prisma.user.findMany();
   }
+
+  async update(id: string, data: any) {
+    return prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
 }
