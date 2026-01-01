@@ -30,20 +30,22 @@ This project demonstrates a clean, real-world SaaS-style architecture using mode
 
 ----------------------------------------------------------------
 
-### PROJECT STRUCTURE
+### Project Structure
 
+```text
 mini-appointment-system/
 ├── backend/
-│ ├── src/
-│ ├── prisma/
-│ ├── Dockerfile
-│ └── .env
+│   ├── src/
+│   ├── prisma/
+│   ├── Dockerfile
+│   └── .env
 ├── frontend/
-│ ├── src/
-│ ├── public/
-│ ├── Dockerfile
-│ └── .env
+│   ├── src/
+│   ├── public/
+│   ├── Dockerfile
+│   └── .env
 └── docker-compose.yml
+```
 
 ----------------------------------------------------------------
 
@@ -66,16 +68,20 @@ Environment variables must be configured for both backend and frontend.
 
 Create a .env file inside the backend/ directory:
 
+```dotenv
 NODE_ENV=development
 PORT=4000
 
 DATABASE_URL=postgresql://postgres:password@db:5432/mini_saas
+
+CORS_ORGINS=http://localhost:3000
 
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=1d
 
 ADMIN_EMAIL=admin@gmail.com
 ADMIN_PASSWORD=password
+```
 
 Note:
 Update database credentials if they differ from docker-compose.yml.
@@ -86,7 +92,9 @@ Update database credentials if they differ from docker-compose.yml.
 
 Create a .env file inside the frontend/ directory:
 
+```dotenv
 VITE_API_URL=http://localhost:4000
+```
 
 This value must point to the backend API.
 
