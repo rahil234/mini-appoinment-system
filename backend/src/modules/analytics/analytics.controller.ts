@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
 import { AnalyticsService } from '@/modules/analytics/analytics.service';
+import { handleRequest } from '@/common/http/handler';
+import { AnalyticsDashboardResponseDto } from '@/modules/analytics/schemas/analytics.response.schema';
 
 @injectable()
 export class AnalyticsController {
@@ -11,12 +12,13 @@ export class AnalyticsController {
     private readonly _analyticsService: AnalyticsService,
   ) {}
 
-  getDashboard = async (req: Request, res: Response) => {
-    const data = await this._analyticsService.getDashboardStats(
-      req.user.id,
-      req.user.role,
-    );
+  getDashboard = handleRequest<unknown, AnalyticsDashboardResponseDto>(
+    async (req) => {
 
-    res.json(data);
-  };
+      return this._analyticsService.getDashboardStats(
+        req.user.id,
+        req.user.role,
+      );
+    },
+  );
 }

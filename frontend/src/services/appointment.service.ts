@@ -39,7 +39,7 @@ export const appointmentService = {
     if (filters.search) params.append("search", filters.search);
 
     const response = await api.get<PaginatedResponse<Appointment>>(
-      `/appointments/user?${params.toString()}`
+      `/appointments/me?${params.toString()}`
     );
     return response.data;
   },

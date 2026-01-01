@@ -1,7 +1,15 @@
-import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
+import { handleRequest } from '@/common/http/handler';
+import {
+  AppointmentsQueryDto,
+  CreateAppointmentDto,
+  DeleteAppointmentParamsDto,
+  UpdateAppointmentBodyDto,
+  UpdateAppointmentParamsDto,
+  UserAppointmentsQueryDto,
+} from '@/modules/appointments/schemas/appointment.request.schema';
 import { AppointmentService } from '@/modules/appointments/appointment.service';
 
 @injectable()
@@ -9,19 +17,26 @@ export class AppointmentController {
   constructor(
     @inject(TYPES.AppointmentService)
     private readonly _appointmentService: AppointmentService,
-  ) {
-  }
+  ) {}
 
-  createAppointment = async (req: Request, res: Response) => {
-    const appointment = await this._appointmentService.create({
+  createAppointment = handleRequest<CreateAppointmentDto>(async (req) => {
+    await this._appointmentService.create({
       ...req.body,
+      userId: req.user.id,
       date: new Date(req.body.date),
     });
 
-    res.status(201).json(appointment);
-  };
+    return {
+      status: 201,
+    };
+  });
 
-  updateAppointment = async (req: Request, res: Response) => {
+  updateAppointment = handleRequest<
+    UpdateAppointmentBodyDto,
+    unknown,
+    unknown,
+    UpdateAppointmentParamsDto
+  >(async (req) => {
     const userId = req.user.id;
 
     const appointment = await this._appointmentService.update(
@@ -30,32 +45,48 @@ export class AppointmentController {
       req.body,
     );
 
-    res.json(appointment);
-  };
+    return appointment;
+  });
 
-  userAppointments = async (req: Request, res: Response) => {
-    const result = await this._appointmentService.list({
-      page: Number(req.query.page) || 1,
-      limit: Number(req.query.limit) || 10,
-      userId: req.user.id,
-      search: req.query.search as string,
-      status: req.query.status as string,
-      date: req.query.date as string,
+  userAppointments = handleRequest<unknown, unknown, UserAppointmentsQueryDto>(
+    async (req) => {
+      const result = await this._appointmentService.list({
+        page: Number(req.query.page) || 1,
+        limit: Number(req.query.limit) || 10,
+        userId: req.user.id,
+        search: req.query.search as string,
+        status: req.query.status as string,
+        date: req.query.date as string,
+      });
+
+      return result;
+    },
+  );
+
+  appointments = handleRequest<unknown, unknown, AppointmentsQueryDto>(
+    async (req) => {
+      const result = await this._appointmentService.list({
+        page: Number(req.query.page) || 1,
+        limit: Number(req.query.limit) || 10,
+        userId: req.query.userId as string,
+        search: req.query.search as string,
+        status: req.query.status as string,
+        date: req.query.date as string,
+      });
+
+      return result;
+    },
+  );
+
+  deleteAppointment = handleRequest<
+    unknown,
+    unknown,
+    unknown,
+    DeleteAppointmentParamsDto
+  >(async (req) => {
+    await this._appointmentService.update(req.params.id, req.user.id, {
+      isDeleted: true,
     });
-
-    res.json(result);
-  };
-
-  appointments = async (req: Request, res: Response) => {
-    const result = await this._appointmentService.list({
-      page: Number(req.query.page) || 1,
-      limit: Number(req.query.limit) || 10,
-      userId: req.query.userId as string,
-      search: req.query.search as string,
-      status: req.query.status as string,
-      date: req.query.date as string,
-    });
-
-    res.json(result);
-  };
+    return { status: 204 };
+  });
 }

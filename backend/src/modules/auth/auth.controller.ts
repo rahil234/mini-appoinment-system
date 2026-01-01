@@ -1,60 +1,78 @@
-import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
 import { AuthService } from '@/modules/auth/auth.service';
-import { clearCookies, setAccessToken, setRefreshToken } from '@/modules/auth/utils/cookie.utils';
+import {
+  clearCookies,
+  setAccessToken,
+  setRefreshToken,
+} from '@/modules/auth/utils/cookie.utils';
+import {
+  LoginRequestDto,
+  RegisterRequestDto,
+} from '@/modules/auth/schemas/auth.request.schema';
+import { handleRequest } from '@/common/http/handler';
 
 @injectable()
 export class AuthController {
   constructor(
     @inject(TYPES.AuthService)
     private readonly _authService: AuthService,
-  ) {
-  }
+  ) {}
 
-  register = async (req: Request, res: Response) => {
-    const { accessToken, refreshToken } = await this._authService.register(req.body);
+  register = handleRequest<RegisterRequestDto, { message: string }>(
+    async (req, res) => {
+      const { accessToken, refreshToken } = await this._authService.register(
+        req.body,
+      );
 
-    setAccessToken(res, accessToken);
-    setRefreshToken(res, refreshToken);
+      setAccessToken(res, accessToken);
+      setRefreshToken(res, refreshToken);
 
-    res.status(201).json({
-      message: 'User registered successfully',
-    });
-  };
+      return {
+        status: 201,
+        body: {
+          message: 'User registered successfully',
+        },
+      };
+    },
+  );
 
-  login = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+  login = handleRequest<LoginRequestDto, { message: string }>(
+    async (req, res) => {
+      const { email, password } = req.body;
 
-    const {
-      accessToken,
-      refreshToken,
-    } = await this._authService.login(email, password);
+      const { accessToken, refreshToken } = await this._authService.login(
+        email,
+        password,
+      );
 
-    setAccessToken(res, accessToken);
-    setRefreshToken(res, refreshToken);
+      setAccessToken(res, accessToken);
+      setRefreshToken(res, refreshToken);
 
-    res.json({
-      message: 'Logged in successfully',
-    });
-  };
+      return {
+        message: 'Logged in successfully',
+      };
+    },
+  );
 
-  logout = (_req: Request, res: Response) => {
+  logout = handleRequest(async (_req, res) => {
     clearCookies(res);
-    res.json({
-      message: 'Logged out successfully',
-    });
-  };
 
-  refreshToken = async (_req: Request, res: Response) => {
+    return {
+      message: 'Logged out successfully',
+    };
+  });
+
+  refreshToken = handleRequest(async (_req, res) => {
     const token = _req.cookies['refresh_token'];
 
-    const { accessToken, refreshToken } = await this._authService.refreshTokens(token);
+    const { accessToken, refreshToken } =
+      await this._authService.refreshTokens(token);
 
     setAccessToken(res, accessToken);
     setRefreshToken(res, refreshToken);
 
-    res.json({ message: 'Refreshed successfully' });
-  };
+    return { message: 'Refreshed successfully' };
+  });
 }

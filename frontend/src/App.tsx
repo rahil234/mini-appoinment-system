@@ -1,20 +1,21 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import DashboardLayout from "@/layouts/DashboardLayout";
+
+import Cases from "@/pages/Cases";
 import Login from "@/pages/Login";
+import Users from "@/pages/Users";
+import NotFound from "@/pages/NotFound";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
 import Appointments from "@/pages/Appointments";
-import Cases from "@/pages/Cases";
-import Users from "@/pages/Users";
-import NotFound from "@/pages/NotFound";
-import { useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 import { useAuthStore } from "@/stores/authStore.ts";
+import { AuthProvider } from "@/contexts/AuthContext";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
 
