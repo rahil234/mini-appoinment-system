@@ -49,12 +49,30 @@ mini-appointment-system/
 
 ----------------------------------------------------------------
 
-### PREREQUISITES
+## Prerequisites
 
-- Docker
-- Docker Compose
+Before running this project, ensure the following tools are installed on your system:
 
-Ensure Docker is installed and running before proceeding.
+### Required
+- **Docker** (v20+)
+- **Docker Compose** (v2+)
+
+Docker is required to run the full application stack (backend, database, frontend) using containers.
+
+---
+
+### Optional (for local development without Docker)
+- **Node.js** (v22+)
+- **npm**
+- **PostgreSQL** (v16+)
+
+These are only needed if you choose to run the backend or frontend directly on your local machine instead of using Docker Compose.
+
+---
+
+### Recommended
+- **Git** – for version control
+- **VS Code** or any modern code editor
 
 ----------------------------------------------------------------
 
