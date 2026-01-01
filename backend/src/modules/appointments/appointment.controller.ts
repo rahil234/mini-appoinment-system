@@ -9,7 +9,8 @@ export class AppointmentController {
   constructor(
     @inject(TYPES.AppointmentService)
     private readonly _appointmentService: AppointmentService,
-  ) {}
+  ) {
+  }
 
   createAppointment = async (req: Request, res: Response) => {
     const appointment = await this._appointmentService.create({
@@ -21,15 +22,35 @@ export class AppointmentController {
   };
 
   updateAppointment = async (req: Request, res: Response) => {
-    const appointment = await this._appointmentService.update(req.params.id, req.body);
+    const userId = req.user.id;
+
+    const appointment = await this._appointmentService.update(
+      req.params.id,
+      userId,
+      req.body,
+    );
+
     res.json(appointment);
   };
 
-  listAppointments = async (req: Request, res: Response) => {
+  userAppointments = async (req: Request, res: Response) => {
     const result = await this._appointmentService.list({
       page: Number(req.query.page) || 1,
       limit: Number(req.query.limit) || 10,
       userId: req.user.id,
+      search: req.query.search as string,
+      status: req.query.status as string,
+      date: req.query.date as string,
+    });
+
+    res.json(result);
+  };
+
+  appointments = async (req: Request, res: Response) => {
+    const result = await this._appointmentService.list({
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
+      userId: req.query.userId as string,
       search: req.query.search as string,
       status: req.query.status as string,
       date: req.query.date as string,

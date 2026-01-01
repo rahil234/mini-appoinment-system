@@ -1,10 +1,10 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { HttpError } from '@/utils/http-error';
-import { AuthRequest } from '@/middlewares/auth.middleware';
+import { UserRole } from '@/types';
 
-export const roleMiddleware = (allowedRoles: string[]) => {
-  return (req: AuthRequest, _res: Response, next: NextFunction) => {
+export const roleMiddleware = (allowedRoles: UserRole[]) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(new HttpError('Unauthorized', 401));
     }

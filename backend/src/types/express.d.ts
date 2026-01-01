@@ -1,8 +1,14 @@
-declare namespace Express {
-  interface Request {
-    user: {
-      id: string;
-      role: string;
-    };
+import { UserRole } from '@/types';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: {
+        id: string;
+        role: UserRole;
+      };
+    }
   }
 }
+
+export {};

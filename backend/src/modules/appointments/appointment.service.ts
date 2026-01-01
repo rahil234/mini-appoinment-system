@@ -15,9 +15,9 @@ export class AppointmentService {
     return prisma.appointment.create({ data });
   }
 
-  async update(id: string, data: Partial<any>) {
+  async update(id: string, userId: string, data: Partial<any>) {
     const existing = await prisma.appointment.findFirst({
-      where: { id, isDeleted: false },
+      where: { id, userId, isDeleted: false },
     });
 
     if (!existing) {
@@ -54,6 +54,9 @@ export class AppointmentService {
     const [data, total] = await Promise.all([
       prisma.appointment.findMany({
         where,
+        include: {
+          user: { select: { id: true, name: true, email: true } },
+        },
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
