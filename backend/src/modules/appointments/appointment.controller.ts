@@ -39,18 +39,12 @@ export class AppointmentController {
   >(async (req) => {
     const userId = req.user.id;
 
-    const appointment = await this._appointmentService.update(
-      req.params.id,
-      userId,
-      req.body,
-    );
-
-    return appointment;
+    return this._appointmentService.update(req.params.id, userId, req.body);
   });
 
   userAppointments = handleRequest<unknown, unknown, UserAppointmentsQueryDto>(
     async (req) => {
-      const result = await this._appointmentService.list({
+      return this._appointmentService.list({
         page: Number(req.query.page) || 1,
         limit: Number(req.query.limit) || 10,
         userId: req.user.id,
@@ -58,14 +52,12 @@ export class AppointmentController {
         status: req.query.status as string,
         date: req.query.date as string,
       });
-
-      return result;
     },
   );
 
   appointments = handleRequest<unknown, unknown, AppointmentsQueryDto>(
     async (req) => {
-      const result = await this._appointmentService.list({
+      return this._appointmentService.list({
         page: Number(req.query.page) || 1,
         limit: Number(req.query.limit) || 10,
         userId: req.query.userId as string,
@@ -73,8 +65,6 @@ export class AppointmentController {
         status: req.query.status as string,
         date: req.query.date as string,
       });
-
-      return result;
     },
   );
 
