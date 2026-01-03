@@ -1,14 +1,14 @@
 import api from '@/lib/api';
-import {User, UpdateUserDto} from '@/types';
+import {User, UpdateUserDto, PaginatedResponse} from '@/types';
 
 export const userService = {
-    async getUsers({page, limit}: { page: number; limit: number }): Promise<{
-        data: User[];
-        meta: { total: number; page: number; limit: number, totalPages: number };
-    }> {
-        const response = await api.get<{ data: User[] }>('/users', {
+    async getUsers({page, limit}: { page: number; limit: number }): Promise<PaginatedResponse<User>> {
+        const response = await api.get<PaginatedResponse<User>>('/users', {
             params: {page, limit}
         });
+
+        console.log(response.data);
+
         return response.data;
     },
 

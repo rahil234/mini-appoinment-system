@@ -54,7 +54,8 @@ const Users: React.FC = () => {
     const [page, setPage] = useState(1);
     const {data, isLoading} = useUsers(page, limit);
 
-    const users = data.data;
+    const users = data?.data ?? [];
+
     const meta = data?.meta;
 
     const toggleStatusMutation = useToggleUserStatus();
