@@ -10,7 +10,10 @@ export const CaseResponseSchema = z.object({
   title: z.string(),
   description: z.string().nullable(),
   status: CaseStatusSchema,
-  assignedUserId: z.uuid().nullable(),
+  assignedUser: z.object({
+    id: z.uuid(),
+    name: z.string(),
+  }).nullable(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });

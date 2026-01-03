@@ -21,7 +21,7 @@ export const RegisterRequestSchema = z.object({
   query: z.object({}).strict(),
 });
 
-export type RegisterRequestDto = z.infer<typeof RegisterRequestSchema>['body'];
+export type RegisterRequestDto = z.infer<typeof RegisterRequestSchema>;
 
 /**
  * ---------------------------
@@ -37,4 +37,4 @@ export const LoginRequestSchema = z.object({
   query: z.object({}).strict(),
 });
 
-export type LoginRequestDto = z.infer<typeof LoginRequestSchema>['body'];
+export type LoginRequestDto = z.infer<typeof LoginRequestSchema>;

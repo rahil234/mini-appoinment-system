@@ -14,9 +14,7 @@ export const CreateCaseRequestSchema = z.object({
   query: z.any(),
 });
 
-export type CreateCaseRequestDto = z.infer<
-  typeof CreateCaseRequestSchema
->['body'];
+export type CreateCaseRequestDto = z.infer<typeof CreateCaseRequestSchema>;
 
 /**
  * ---------------------------
@@ -33,9 +31,7 @@ export const AssignCaseRequestSchema = z.object({
   query: z.object({}).strict(),
 });
 
-export type AssignCaseParamsDto = z.infer<
-  typeof AssignCaseRequestSchema
->['params'];
+export type AssignCaseRequestDto = z.infer<typeof AssignCaseRequestSchema>;
 
 export type AssignCaseBodyDto = z.infer<typeof AssignCaseRequestSchema>['body'];
 
@@ -49,3 +45,20 @@ export const ListCasesRequestSchema = z.object({
   params: z.object({}).strict(),
   query: z.any(),
 });
+
+/**
+ * ---------------------------
+ * DELETE /cases/:id
+ * ---------------------------
+ */
+export const DeleteCaseRequestSchema = z.object({
+  body: z.any(),
+  params: z
+    .object({
+      id: z.uuid('Invalid case id'),
+    })
+    .strict(),
+  query: z.any(),
+});
+
+export type DeleteCaseRequestDto = z.infer<typeof DeleteCaseRequestSchema>;

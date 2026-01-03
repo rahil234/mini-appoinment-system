@@ -1,10 +1,16 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
+import { TYPES } from '@/types/identifiers';
 import { HttpError } from '@/utils/http-error';
-import { prisma } from '@/config/prisma.config';
+import { IAppointmentRepository } from './repositories/appointment.repository.interface';
 
 @injectable()
 export class AppointmentService {
+  constructor(
+    @inject(TYPES.AppointmentRepository)
+    private readonly appointmentRepository: IAppointmentRepository,
+  ) {}
+
   async create(data: {
     title: string;
     date: Date;
@@ -12,22 +18,20 @@ export class AppointmentService {
     status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
     userId: string;
   }) {
-    return prisma.appointment.create({ data });
+    return this.appointmentRepository.create(data);
   }
 
   async update(id: string, userId: string, data: Partial<any>) {
-    const existing = await prisma.appointment.findFirst({
-      where: { id, userId, isDeleted: false },
-    });
+    const existing = await this.appointmentRepository.findByIdAndUser(
+      id,
+      userId,
+    );
 
     if (!existing) {
       throw new HttpError('Appointment not found', 404);
     }
 
-    return prisma.appointment.update({
-      where: { id },
-      data,
-    });
+    return this.appointmentRepository.update(id, data);
   }
 
   async list(filters: {
@@ -38,39 +42,15 @@ export class AppointmentService {
     userId?: string;
     date?: string;
   }) {
-    const { page, limit, status, userId, date } = filters;
-
-    const where: any = { isDeleted: false };
-
-    if (status) where.status = status;
-    if (userId) where.userId = userId;
-    if (filters.search) where.title = { contains: filters.search };
-    if (date)
-      where.date = {
-        gte: new Date(date),
-        lt: new Date(new Date(date).setDate(new Date(date).getDate() + 1)),
-      };
-
-    const [data, total] = await Promise.all([
-      prisma.appointment.findMany({
-        where,
-        include: {
-          user: { select: { id: true, name: true, email: true } },
-        },
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      }),
-      prisma.appointment.count({ where }),
-    ]);
+    const { data, total } = await this.appointmentRepository.findMany(filters);
 
     return {
       data,
       meta: {
-        page,
-        limit,
+        page: filters.page,
+        limit: filters.limit,
         total,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / filters.limit),
       },
     };
   }

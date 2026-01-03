@@ -2,6 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 
 import { HttpResponse } from '@/common/http/http-response';
 
+type RequestFromDto<T> = Request<
+  T extends { params: infer P } ? P : unknown,
+  any,
+  T extends { body: infer B } ? B : unknown,
+  T extends { query: infer Q } ? Q : unknown
+>;
+
 type TypedRequest<
   TBody = unknown,
   TQuery = unknown,
@@ -11,18 +18,15 @@ type TypedRequest<
 type HandlerResult<T> = HttpResponse<T> | T | void;
 
 export const handleRequest =
-  <TBody = unknown, TResponse = unknown, TQuery = unknown, TParams = unknown>(
+  <TRequest, TResponse = unknown>(
     handler: (
-      req: TypedRequest<TBody, TQuery, TParams>,
+      req: RequestFromDto<TRequest>,
       res: Response,
     ) => Promise<HandlerResult<TResponse>>,
   ) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await handler(
-        req as TypedRequest<TBody, TQuery, TParams>,
-        res,
-      );
+      const result = await handler(req as RequestFromDto<TRequest>, res);
 
       if (!result) return;
 

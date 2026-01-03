@@ -38,7 +38,7 @@ export const GetUsersRequestSchema = z.object({
   }),
 });
 
-export type GetUsersQueryDto = z.infer<typeof GetUsersRequestSchema>['query'];
+export type GetUsersRequestDto = z.infer<typeof GetUsersRequestSchema>;
 
 export const UpdateUserRequestSchema = z.object({
   body: z.object({
@@ -49,10 +49,4 @@ export const UpdateUserRequestSchema = z.object({
   }),
 });
 
-export type UpdateUserDto = z.infer<
-  typeof UpdateUserRequestSchema
->['body'];
-
-export type UpdateUserParamsDto = z.infer<
-  typeof UpdateUserRequestSchema
->['params'];
+export type UpdateUserRequestDto = z.infer<typeof UpdateUserRequestSchema>;

@@ -4,4 +4,7 @@ export const TYPES = {
   AppointmentService: Symbol.for('AppointmentService'),
   CaseService: Symbol.for('CaseService'),
   AnalyticsService: Symbol.for('AnalyticsService'),
+  UserRepository: Symbol.for('UserRepository'),
+  AppointmentRepository: Symbol.for('AppointmentRepository'),
+  CaseRepository: Symbol.for('CaseRepository'),
 };

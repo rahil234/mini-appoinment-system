@@ -26,9 +26,9 @@ export const CreateAppointmentRequestSchema = z.object({
   query: z.any(),
 });
 
-export type CreateAppointmentDto = z.infer<
+export type CreateAppointmentRequestDto = z.infer<
   typeof CreateAppointmentRequestSchema
->['body'];
+>;
 
 export const UpdateAppointmentRequestSchema = z.object({
   body: z.object({
@@ -43,13 +43,9 @@ export const UpdateAppointmentRequestSchema = z.object({
   query: z.any(),
 });
 
-export type UpdateAppointmentBodyDto = z.infer<
+export type UpdateAppointmentRequestDto = z.infer<
   typeof UpdateAppointmentRequestSchema
->['body'];
-
-export type UpdateAppointmentParamsDto = z.infer<
-  typeof UpdateAppointmentRequestSchema
->['params'];
+>;
 
 export const UserAppointmentsRequestSchema = z.object({
   body: z.any(),
@@ -58,13 +54,13 @@ export const UserAppointmentsRequestSchema = z.object({
     ...paginationQuery,
     search: z.string().optional(),
     status: statusEnum.optional(),
-    date: z.string().optional(), // yyyy-mm-dd or ISO
+    date: z.string().optional(),
   }),
 });
 
-export type UserAppointmentsQueryDto = z.infer<
+export type UserAppointmentsRequestDto = z.infer<
   typeof UserAppointmentsRequestSchema
->['query'];
+>;
 
 export const AppointmentsRequestSchema = z.object({
   body: z.any(),
@@ -78,9 +74,7 @@ export const AppointmentsRequestSchema = z.object({
   }),
 });
 
-export type AppointmentsQueryDto = z.infer<
-  typeof AppointmentsRequestSchema
->['query'];
+export type AppointmentsRequestDto = z.infer<typeof AppointmentsRequestSchema>;
 
 export const DeleteAppointmentDto = z.object({
   params: z.object({
@@ -88,6 +82,4 @@ export const DeleteAppointmentDto = z.object({
   }),
 });
 
-export type DeleteAppointmentParamsDto = z.infer<
-  typeof DeleteAppointmentDto
->['params'];
+export type DeleteAppointmentRequestDto = z.infer<typeof DeleteAppointmentDto>;

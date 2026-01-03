@@ -5,6 +5,7 @@ import { validate } from '@/middlewares/validate';
 import {
   AssignCaseRequestSchema,
   CreateCaseRequestSchema,
+  DeleteCaseRequestSchema,
   ListCasesRequestSchema,
 } from '@/modules/cases/schemas/case.request.schema';
 import { authMiddleware } from '@/middlewares/auth.middleware';
@@ -35,6 +36,13 @@ router.get(
   authMiddleware,
   validate(ListCasesRequestSchema),
   controller.listCases,
+);
+
+router.delete(
+  '/:id',
+  authMiddleware,
+  validate(DeleteCaseRequestSchema),
+  controller.deleteCase,
 );
 
 export default router;

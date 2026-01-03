@@ -2,9 +2,9 @@ import { inject, injectable } from 'inversify';
 
 import { TYPES } from '@/types/identifiers';
 import {
-  AssignCaseBodyDto,
-  AssignCaseParamsDto,
+  AssignCaseRequestDto,
   CreateCaseRequestDto,
+  DeleteCaseRequestDto,
 } from '@/modules/cases/schemas/case.request.schema';
 import {
   CaseListResponseDto,
@@ -17,31 +17,31 @@ import { CaseService } from '@/modules/cases/case.service';
 export class CaseController {
   constructor(
     @inject(TYPES.CaseService)
-    private readonly service: CaseService,
+    private readonly caseService: CaseService,
   ) {}
 
   createCase = handleRequest<CreateCaseRequestDto>(async (req) => {
-    await this.service.create(req.body);
+    await this.caseService.create(req.body);
     return { status: 201 };
   });
 
-  assignCase = handleRequest<
-    AssignCaseBodyDto,
-    CaseResponseDto,
-    unknown,
-    AssignCaseParamsDto
-  >(async (req) => {
-    const result = await this.service.assign(req.params.id, req.body.userId);
+  assignCase = handleRequest<AssignCaseRequestDto, CaseResponseDto>(
+    async (req) => {
+      const result = await this.caseService.assign(
+        req.params.id,
+        req.body.userId,
+      );
 
-    return {
-      ...result,
-      createdAt: result.createdAt.toISOString(),
-      updatedAt: result.updatedAt.toISOString(),
-    };
-  });
+      return {
+        ...result,
+        createdAt: result.createdAt.toISOString(),
+        updatedAt: result.updatedAt.toISOString(),
+      };
+    },
+  );
 
   listCases = handleRequest<unknown, CaseListResponseDto>(async () => {
-    const cases = await this.service.list();
+    const cases = await this.caseService.list();
     return cases.map(
       (c): CaseResponseDto => ({
         id: c.id,
@@ -50,8 +50,16 @@ export class CaseController {
         description: c.description,
         createdAt: c.createdAt.toISOString(),
         updatedAt: c.updatedAt.toISOString(),
-        assignedUserId: c.assignedUserId ?? null,
+        assignedUser: c.assignedUser,
       }),
     );
   });
+
+  deleteCase = handleRequest<DeleteCaseRequestDto, { message: string }>(
+    async (req) => {
+      await this.caseService.delete(req.params.id);
+
+      return { message: `Case with id ${req.params.id} deleted successfully.` };
+    },
+  );
 }

@@ -14,7 +14,6 @@ export class AnalyticsController {
 
   getDashboard = handleRequest<unknown, AnalyticsDashboardResponseDto>(
     async (req) => {
-
       return this._analyticsService.getDashboardStats(
         req.user.id,
         req.user.role,
